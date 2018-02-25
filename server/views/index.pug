@@ -1,0 +1,24 @@
+block content
+  #RegistedPos
+    each pos in registedPos
+      p #{JSON.stringify(pos)}
+  canvas(width="500px", height="500px")
+  script(src="/socket.io/socket.io.js")
+  script.
+    const socket = io()
+    const width = 500
+    const height = 500
+    socket.on('newPos', (data)=>{
+      const element = document.createElement('p')
+      element.innerHTML = JSON.stringify(data)
+      document.getElementById('RegistedPos').appendChild(element)
+    })
+    const canvas = document.querySelector("canvas")
+    const ctx = canvas.getContext('2d');
+    socket.on('pos', (data)=>{
+      ctx.fillStyle = "#fff"
+      ctx.fillRect(0, 0, width, height)
+      ctx.fillStyle = "#000"
+      ctx.fillRect(data.x * width / 10, data.y * height / 10, 5, 5)
+      console.log(data)
+    })
